@@ -13,7 +13,6 @@ public class Autor {
     private Integer fechaDeNacimiento;
     private Integer fechaDeFallecimiento;
 
-    //public Autor() {}
 
     public Autor(DatosAutor autor) {
         this.nombreAutor = autor.nombre();
@@ -56,11 +55,9 @@ public class Autor {
     }
     @Override
     public String toString() {
-        return "Autor{" +
-                "id=" + id +
-                ", nombreAutor='" + nombreAutor + '\'' +
+        return
+                " nombreAutor='" + nombreAutor + '\'' +
                 ", fechaDeNacimiento=" + fechaDeNacimiento +
-                ", fechaDeFallecimiento=" + fechaDeFallecimiento +
-                '}';
+                ", fechaDeFallecimiento=" + fechaDeFallecimiento;
     }
 }

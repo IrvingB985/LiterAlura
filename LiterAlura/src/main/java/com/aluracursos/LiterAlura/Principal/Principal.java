@@ -7,32 +7,30 @@ import com.aluracursos.LiterAlura.models.DatosLibro;
 import com.aluracursos.LiterAlura.models.Libro;
 import com.aluracursos.LiterAlura.repository.LibroRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class Principal {
 
     private Scanner teclado = new Scanner(System.in);
-    private ConsumoAPI consumoAPI = new ConsumoAPI();
     private final String URL = "https://gutendex.com/books/?search=";
     ConvierteDatos conversor = new ConvierteDatos();
-    private List<DatosLibro> datoslibros = new ArrayList<>();
     private LibroRepository repositorio;
-    public Principal(LibroRepository repository) {
-        this.repositorio = repository;
+
+    public Principal(LibroRepository repositorio) {
+        this.repositorio = repositorio;
     }
 
     //###############Menu###################################
     public void muestaMenu() {
         var opcion = -1;
         while (opcion != 0) {
+
             var menu = """
                     #/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/
                     1 - Buscar series
                     2 - Mostrar búsqueda
-                    
+
                     0 - Salir
                     #/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/
                     """;
@@ -47,6 +45,8 @@ public class Principal {
                 case 2:
                     mostrarlista();
                     break;
+                case 3:
+                    filtroIdioma();
                 case 0:
                     System.out.println("Cerrando la aplicación...");
                     break;
@@ -56,29 +56,44 @@ public class Principal {
         }
 
     }
-
     //##############opciones#############
 
-    private DatosLibro buscarLibro() {
+    private DatosLibro buscarlibro() {
         System.out.println("###############################");
         System.out.println("# Escribe el título del libro #");
         System.out.println("###############################");
         var nombreLibro = teclado.nextLine();
         var json = ConsumoAPI.obtenerDatos(URL+nombreLibro.replace(" ","+"));
-        //System.out.println(json);
-        return conversor.obtenerDatos(json, DatosLibro.class);}
+        return conversor.obtenerDatos(json, Datos.class).resultados().get(0);}
 
     private void opcion1(){
-        DatosLibro datos = buscarLibro();
-        //datoslibros.add(datos)
+        DatosLibro datos =  buscarlibro();
         Libro libro = new Libro(datos);
-        //repositorio.save(libro);
-        System.out.println(datos);
-    }
+        repositorio.save(libro);
+        System.out.println(datos);}
 
     private void mostrarlista() {
-        List<Libro> libros =repositorio.findAll();
+        List<Libro> libros=repositorio.findAll();
         libros.forEach(System.out::println);
+
+    }
+    private boolean validadorIdioma(String idioma){
+        return idioma.equals("es")||idioma.equals("en");
+    }
+
+    private void filtroIdioma() {
+        System.out.println("""
+                Filtrar por Idioma
+                es - Español
+                en - Ingles
+                fr - Frances
+                """);
+        String idioma = teclado.nextLine().trim().toLowerCase();
+        if(!validadorIdioma(idioma)){
+            System.out.println("No existe");
+            return;
+        }
+        List<Libro> librosPorIdioma = repositorio.findLibrosByIdiomasContaining(idioma);
     }
 
 }

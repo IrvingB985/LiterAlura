@@ -2,6 +2,7 @@ package com.aluracursos.LiterAlura.models;
 
 import jakarta.persistence.*;
 
+import java.util.Collections;
 import java.util.List;
 
 
@@ -12,30 +13,32 @@ public class Libro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(unique = true)
-    //@ManyToOne(fetch = FetchType.LAZY)
     private String titulo;
-    private String autor;
-    private String language;
-    private Double numeroDeDescargas;
 
+    private String autor;
+    private List<String> language;
+    private String numeroDeDescargas;
+
+    public Libro(){}
 
     public Libro(DatosLibro datosLibro){
         this.titulo = datosLibro.titulo();
-       // this.autor = datosLibro.autor().toString();
-        //this.language = datosLibro.language().toString();
+        this.autor = datosLibro.autor().toString();
+        this.language = Collections.singletonList(datosLibro.idiomas().get(0));
+        this.numeroDeDescargas = datosLibro.numDescargas();
     }
 
-   // public Libro() {}
+    public Libro(Datos datos) {
+    }
+
 
     @Override
     public String toString() {
-        return "Libro{" +
-                "id=" + id +
-                ", titulo='" + titulo + '\'' +
-                ", autores=" + autor +
+        return
+                " titulo='" + titulo + '\'' +
+                ", autor='" + autor + '\'' +
                 ", language='" + language + '\'' +
-                ", numeroDeDescargas=" + numeroDeDescargas +
-                '}';
+                ", Descargas= " + numeroDeDescargas;
     }
 
     public Long getId() {
@@ -54,27 +57,27 @@ public class Libro {
         this.titulo = titulo;
     }
 
-    public String getAutores() {
+    public String getAutor() {
         return autor;
     }
 
-    public void setAutores(String autores) {
-        this.autor = autores;
+    public void setAutor(String autor) {
+        this.autor = autor;
     }
 
-    public String getLanguage() {
+    public List<String> getLanguage() {
         return language;
     }
 
-    public void setLanguage(String language) {
+    public void setLanguage(List<String> language) {
         this.language = language;
     }
 
-    public Double getNumeroDeDescargas() {
+    public String getNumeroDeDescargas() {
         return numeroDeDescargas;
     }
 
-    public void setNumeroDeDescargas(Double numeroDeDescargas) {
+    public void setNumeroDeDescargas(String numeroDeDescargas) {
         this.numeroDeDescargas = numeroDeDescargas;
     }
 }

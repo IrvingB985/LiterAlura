@@ -9,14 +9,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class LiterAluraApplication implements CommandLineRunner {
 	@Autowired
-	private LibroRepository repository;
+	private LibroRepository repositorio;
 	public static void main(String[] args) {
 		SpringApplication.run(LiterAluraApplication.class, args);}
 
 	@Override
 	public void run(String... args) throws Exception {
-
-		Principal principal = new Principal(repository);
+		Principal principal = new Principal(repositorio);
 		principal.muestaMenu();
 	}
 
